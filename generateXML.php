@@ -1,6 +1,6 @@
 <?php
 require_once('db.php');
-$limit = 100;
+$limit = 100; // limiet van de SQL select statement, wordt niet gebruikt bij
 
 
 function getStationData(int $id):array{
@@ -22,7 +22,6 @@ function getStationData(int $id):array{
 
             mysqli_free_result($result);
             return $results;
-
         }
 }
 
@@ -92,10 +91,12 @@ function generateStationXML(array $data):string {
     if(count($data) > 0) {
         $result = "<?xml version=\"1.0\"?>\n<WEATHERDATA>";
         foreach($data as $row){
-            $result  = $result . generateEntryTable($row);
+            $result  = $result . generateEntryStationDataTable($row);
         }
         return $result . '</WEATHERDATA>';
 
+    } else {
+        return "<ERROR>NO RESULT</ERROR>";
     }
 }
 
@@ -122,7 +123,3 @@ function generateAllStationsXNML(array $data):string {
         return $result . '</STATIONDATA>';
     }
 }
-
-
-
-//echo generateXML(getStationData(531920));
