@@ -48,7 +48,24 @@ function getAllData():array{
     }
 }
 
-function generateEntryTable(array $row):string {
+function getAllStations():array {
+    global $limit;
+    global $conn;
+    $sql = "SELECT * FROM stations";//" LIMIT ".$limit;
+    if($stmt = mysqli_prepare($conn, $sql)){
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $results = [];
+        while($data = mysqli_fetch_assoc($result)){
+            array_push($results, $data);
+        }
+        mysqli_free_result($result);
+        return $results;
+    }
+}
+
+
+function generateEntryStationDataTable(array $row):string {
 
     return <<<EOT
 	<MEASUREMENT>
@@ -71,7 +88,7 @@ function generateEntryTable(array $row):string {
 EOT;
 }
 
-function generateXML(array $data):string {
+function generateStationXML(array $data):string {
     if(count($data) > 0) {
         $result = "<?xml version=\"1.0\"?>\n<WEATHERDATA>";
         foreach($data as $row){
@@ -82,6 +99,29 @@ function generateXML(array $data):string {
     }
 }
 
+function generateStationsRow(array $row):string {
+    return <<<EOT
+    <STATION>
+        <STN>{$row['stn']}</STN>
+        <NAME>{$row['name']}</NAME>
+        <COUNTRY>{$row['country']}</COUNTRY>
+        <LAT>{$row['latitude']}</LAT>
+        <LONG>{$row['longitude']}</LONG>
+        <ELEVATION>{$row['elevation']}</ELEVATION>
+    </STATION>
+EOT;
+
+}
+
+function generateAllStationsXNML(array $data):string {
+    if(count($data) > 0) {
+        $result = "<?xml version=\"1.0\"?>\n<STATIONDATA>";
+        foreach ($data as $row) {
+            $result = $result . generateStationsRow($row);
+        }
+        return $result . '</STATIONDATA>';
+    }
+}
 
 
 
