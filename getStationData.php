@@ -21,6 +21,7 @@ if($station != null && $station != false){ //als er een andere waarde dan null e
 } else {
     $data = getAllData();
 }
+
 $xml = generateStationXML($data);
 
 header("Content-type: text/xml");
