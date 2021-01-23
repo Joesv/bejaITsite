@@ -65,7 +65,13 @@ function getAllStations():array {
 
 
 function generateEntryStationDataTable(array $row):string {
-
+    $FRSHTT = '';
+    $FRSHTT .= $row['freezing'] ? '1' : '0';
+    $FRSHTT .= $row['raining'] ? '1' : '0';
+    $FRSHTT .= $row['snowing'] ? '1' : '0';
+    $FRSHTT .= $row['hail'] ? '1' : '0';
+    $FRSHTT .= $row['thunder'] ? '1' : '0';
+    $FRSHTT .= $row['tornado'] ? '1' : '0';
     return <<<EOT
 	<MEASUREMENT>
 		<STN>{$row['stn']}</STN>
@@ -79,7 +85,7 @@ function generateEntryStationDataTable(array $row):string {
 		<WDSP>{$row['wdsp']}</WDSP>
 		<PRCP>{$row['prcp']}</PRCP>
 		<SNDP>{$row['sndp']}</SNDP>
-		<FRSHTT>010101</FRSHTT>
+		<FRSHTT>{$FRSHTT}</FRSHTT>
 		<CLDC>{$row['cldc']}</CLDC>
 		<WNDDIR>{$row['winddir']}</WNDDIR>
 	</MEASUREMENT>
