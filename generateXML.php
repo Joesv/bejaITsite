@@ -1,5 +1,5 @@
 <?php
-require_once('db.php');
+require_once('config.php');
 $limit = 100; // limiet van de SQL select statement, wordt niet gebruikt bij
 
 
