@@ -96,11 +96,33 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+body {
+  margin: 0;
+}
+
+/* Style the header */
+.header {
+  background-color: #f1f1f1;
+  padding: 1px;
+  text-align: left;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  text-align: center;
+}
+</style>
     <meta charset="UTF-8">
     <title>Sign Up</title>
+    <div class="header"  style="background-color:#78a22f;">
+  <h1><a href="welcome.php"><img src=https://www.kathmandu.co.nz/static/version1611282755/frontend/Kathmandu/default/en_NZ/images/logo.svg alt="Kathmandu Logo" height="30" a href="welcome.php"></a></h1>
+</div>
 </head>
 <body>
-    <div class="wrapper">
+    <div class="center">
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
