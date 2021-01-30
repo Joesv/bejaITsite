@@ -1,2 +1,4 @@
-</body>
-</html>
+<!-- footer -->
+
+<div class="footer">
+</div>
