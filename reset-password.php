@@ -75,8 +75,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <head>
     <meta charset="UTF-8">
     <title>Reset Password</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        /* Style the header */
+        .header {
+            background-color: #f1f1f1;
+            padding: 1px;
+            text-align: left;
+        }
+
+        .center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+    <div class="header"  style="background-color:#78a22f;">
+        <h1><a href="welcome.php"><img src=https://www.kathmandu.co.nz/static/version1611282755/frontend/Kathmandu/default/en_NZ/images/logo.svg alt="Kathmandu Logo" height="30" a href="welcome.php"></a></h1>
+    </div>
 </head>
 <body>
+<div class="center">
         <h2>Reset Password</h2>
         <p>Please fill out this form to reset your password.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
@@ -95,6 +118,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <a class="btn btn-link" href="welcome.php">Cancel</a>
             
         </form>
+</div>
        
 </body>
 </html>
