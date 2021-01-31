@@ -1,4 +1,5 @@
 <?php
+include_once('header.php');
 // Initialize the session
 session_start();
 
@@ -12,32 +13,11 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <style>
-body {
-  margin: 0;
-}
-
-/* Style the header */
-.header {
-  background-color: #f1f1f1;
-  padding: 1px;
-  text-align: left;
-}
-
-.center {
-  margin: auto;
-  width: 50%;
-  padding: 10px;
-}
-</style>
-    <title>Welcome</title>
+<title>Welcome</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="header"  style="background-color:#78a22f;">
-  <h1><a href="welcome.php"><img src=https://www.kathmandu.co.nz/static/version1611282755/frontend/Kathmandu/default/en_NZ/images/logo.svg alt="Kathmandu Logo" height="30"></a></h1>
-</div>
 <div class="center"> 
         <h1 class = "center">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. 
         <br/>Welcome to Kathmandu.</h1>
