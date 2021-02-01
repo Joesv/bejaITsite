@@ -8,7 +8,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     exit;
 }
 ?>
- 
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +40,15 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <p>
     <h1><a href="welcome.php"><img src=https://www.kathmandu.co.nz/static/version1611282755/frontend/Kathmandu/default/en_NZ/images/logo.svg alt="Kathmandu Logo" height="30"></a></h1>
 </div>
+
+-->
+<?php
+
+$title = "Welcome";
+require_once("includes/header.php");
+require_once("includes/menu.php");
+?>
+
 <div class="center">
     <h1 class = "center">Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.
         <br/>Welcome to Kathmandu.</h1>
