@@ -69,7 +69,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($link);
 }
 ?>
- 
+ <!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,6 +99,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </div>
 </head>
 <body>
+
+-->
+
+<?php
+$title = "Reset Password";
+require_once("includes/header.php");
+require_once("includes/menu.php");
+
+?>
 <div class="center">
         <h2>Reset Password</h2>
         <p>Please fill out this form to reset your password.</p>

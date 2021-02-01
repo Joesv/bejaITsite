@@ -87,7 +87,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($link);
 }
 ?>
- 
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,7 +116,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <h1><a href="welcome.php"><img src="https://www.kathmandu.co.nz/static/version1611282755/frontend/Kathmandu/default/en_NZ/images/logo.svg" alt="Kathmandu Logo" height="30" a href="welcome.php"></a></h1>
     </div>
 </head>
-<body>
+<body> -->
+
+<?php
+
+$title = "Login";
+require_once("includes/header.php");
+require_once("includes/menu.php");
+?>
 <div class="center">
 <h2>Login</h2>
         <p>Please fill in your credentials to login.</p>

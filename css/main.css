@@ -9,3 +9,15 @@ html, body {
     height: 100%;
 }
 
+.header {
+    background-color: #78a22f;
+    padding: 2px;
+    text-align: left;
+    height: 50px;
+}
+.center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+}
