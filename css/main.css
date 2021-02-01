@@ -21,3 +21,25 @@ html, body {
     padding: 10px;
     text-align: center;
 }
+
+.logout {
+    float: right;
+}
+.logout div {
+    float:left;
+    display: inline;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 0;
+    font-size: 20px;
+}
+
+.logout div p {
+    color: white;
+}
+
+.logout div a {
+    color :white;
+    text-decoration: none;
+}
