@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 let data = [];
 generateData();
 console.log(data);
-drawGraph();
+drawGraph('chart', data, 400,400);
 
 
 
@@ -18,10 +18,10 @@ function generateData() {
     }
 }
 
-function convertDataToXY(min, max, val, entry) {
+function convertDataToXY(min, max, val, entry, canvas) {
     const length = data.length;
-    const x = Math.round(width / length * entry);
-    const y = Math.round((val - min) / max * height);
+    const x = Math.round(canvas.width / length * entry);
+    const y = Math.round((val - min) / max * canvas.height);
     //console.log({min, max, val, entry , x, y})
     return {x,y}
 }
@@ -36,7 +36,7 @@ function drawGraph(canvasId, data, width, height){
     let max = Math.max(... data);
     let points = [];
     for(let i = 0; i < data.length; i++) {
-        points.push(convertDataToXY(min, max, data[i], i));
+        points.push(convertDataToXY(min, max, data[i], i, canvas));
     }
     if(points.length !== 0){
         ctx.beginPath();

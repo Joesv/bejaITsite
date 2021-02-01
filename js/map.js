@@ -13,14 +13,13 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // show the scale bar on the lower left corner
 L.control.scale().addTo(map);
-
+/*
 map.on('moveend', updateMarkers);
 
 // show a marker on the map
 fetch('getAllStations.php')
     .then(response => response.text())
     .then(data => {
-        console.log(data);
         let parser = new DOMParser();
         xml = parser.parseFromString(data, "text/xml");
         const length = xml.getElementsByTagName("STATION").length;
@@ -30,7 +29,6 @@ fetch('getAllStations.php')
             //console.log({lat, long})
             markers.push(new L.marker({lon: long, lat: lat}).on('click', onMarkerClick)); //marker aan de markers toevoegen
         }
-        console.log(markers);
         updateMarkers();
 
     });
@@ -53,7 +51,6 @@ function updateMarkers(){
 }
 
 function onMarkerClick(event){
-    console.log(event);
     const latlng = event.latlng;
     const lat = latlng.lat;
     const long = latlng.lng;
@@ -66,13 +63,22 @@ function onMarkerClick(event){
         const stationLong = xml.getElementsByTagName("LONG")[i].childNodes[0].nodeValue;
 
         if(lat === stationLat && long  === stationLong){
-            console.log( "FOUND")
             const name = xml.getElementsByTagName("NAME")[i].childNodes[0].nodeValue;
             const stn = xml.getElementsByTagName("STN")[i].childNodes[0].nodeValue;
             console.log({stn, name});
-            alert(name)
+            //alert(name)
             i = length;
+            bindButtonToModal("dataModal", "close")
+            openModal("dataModal");
+
         }
     }
 
-}
+}*/
+
+const modal = document.getElementById("dataModal");
+const button = document.getElementById("close");
+
+button.onclick = function(){modal.style.display = "none"}
+
+modal.style.display = "block";
