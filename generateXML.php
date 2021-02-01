@@ -1,14 +1,14 @@
 <?php
-require_once('config.php');
+require_once('includes/config.php');
 $limit = 100; // limiet van de SQL select statement, wordt niet gebruikt bij
 
 
 function getStationData(int $id):array{
     global $limit;
-    global $conn;
+    global $link;
 
     $sql = "SELECT * FROM measurements WHERE stn = ? LIMIT " . $limit;
-        if($stmt = mysqli_prepare($conn, $sql)) { //maak een prepared statement aan
+        if($stmt = mysqli_prepare($link, $sql)) { //maak een prepared statement aan
             mysqli_stmt_bind_param($stmt, 'i', $id); //bind de id aan de sql. Op deze manier krijg je geen SQL injecties.
             mysqli_stmt_execute($stmt);
 
@@ -27,10 +27,10 @@ function getStationData(int $id):array{
 
 function getAllData():array{
     global $limit;
-    global $conn;
+    global $link;
 
     $sql = "SELECT * FROM measurements LIMIT " . $limit;
-    if($stmt = mysqli_prepare($conn, $sql)) { //maak een prepared statement aan
+    if($stmt = mysqli_prepare($link, $sql)) { //maak een prepared statement aan
         mysqli_stmt_execute($stmt);
 
         //mysqli_stmt_bind_result($stmt, $result);
@@ -49,9 +49,9 @@ function getAllData():array{
 
 function getAllStations():array {
     global $limit;
-    global $conn;
+    global $link;
     $sql = "SELECT * FROM stations";//" LIMIT ".$limit;
-    if($stmt = mysqli_prepare($conn, $sql)){
+    if($stmt = mysqli_prepare($link, $sql)){
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $results = [];
