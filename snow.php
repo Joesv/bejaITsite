@@ -8,7 +8,7 @@ redirectIfNotLoggedIn();
 
 ?>
 <!-- sneeuw -->
-<div class="content">
+<div class="center snow" >
     <table class="snowdata">
         <thead>
             <tr>
