@@ -1,22 +1,35 @@
 'use strict'
 
 // initialize Leaflet
-const map = L.map('map').setView({lon: 5, lat: 52}, 8);
+const map = L.map('map').setView({lon: 0, lat: 60}, 4);
 let markers = [];
-let xml;
+let xml; // de xml waar de data van de weather stations in opgeslagen kan worden
 
+/** modal (popup */
+const modal = document.getElementById("dataModal");
+const modelHeader = document.getElementsByClassName("model-h2")[0];
+const modalContent = document.getElementsByClassName("modal-body")[0];
+const button = document.getElementById("close");
+/** arrow functions om de modal te verbergen wanneer of op het kruisje geklikt wordt of wanneer er buiten de modal geklikt wordt */
+modal.onclick = ()=> { modal.style.display = "none" };
+button.onclick = ()=> { modal.style.display = "none"};
+
+
+
+
+//https://leafletjs.com/examples/quick-start/
 // add the OpenStreetMap tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
 }).addTo(map);
 
 // show the scale bar on the lower left corner
 L.control.scale().addTo(map);
-/*
+
+/** voeg een listener toe die de markers update wanneer de map verplaatst wordt */
 map.on('moveend', updateMarkers);
 
-// show a marker on the map
+/** fetch the station data */
 fetch('getAllStations.php')
     .then(response => response.text())
     .then(data => {
@@ -26,59 +39,63 @@ fetch('getAllStations.php')
         for( let i = 0; i < length; i++){
             const lat = xml.getElementsByTagName("LAT")[i].childNodes[0].nodeValue;
             const long = xml.getElementsByTagName("LONG")[i].childNodes[0].nodeValue;
-            //console.log({lat, long})
-            markers.push(new L.marker({lon: long, lat: lat}).on('click', onMarkerClick)); //marker aan de markers toevoegen
+            markers.push(new L.marker({lon: long, lat: lat}).on('click', onMarkerClick)); //add the marker to the markers
         }
         updateMarkers();
 
     });
+
+/** Verberg de markers wanneer ze buiten de view zijn, of laat ze zien als ze binnen het scherm vallen */
 function updateMarkers(){
-    const bounds = map.getBounds();
+    const minZoomLevel = 0; // from which zoomlevel the markers are supposed to be shown.
+    const bounds = map.getBounds(); //returns the geographical bounds of the current screen (the lat/long of northeast and southwest)
     const zoomLevel = map.getZoom();
-    let visibleCount = 0;
-    //console.log(markers)
-    for (let i = 0; i < markers.length; i++) {
+    for (let i = 0; i < markers.length; i++) { //loop through all the markers
         const marker = markers[i];
-        const visib = bounds.contains(marker.getLatLng());
-        if (visib && zoomLevel >6) {
+        const visib = bounds.contains(marker.getLatLng()); //if the marker is in view
+        if (visib && zoomLevel > minZoomLevel) {
             map.addLayer(marker);
-            visibleCount++;
         } else {
-            map.removeLayer(marker);
+            map.removeLayer(marker); //if its not visible or it's not zoomed in far enough; don't render the marker
         }
     }
-    console.log(visibleCount + " van de " + markers.length);
 }
-
+/** onclick event */
 function onMarkerClick(event){
+    //event gegevens
     const latlng = event.latlng;
     const lat = latlng.lat;
     const long = latlng.lng;
+
     const length = xml.getElementsByTagName("STATION").length;
-    console.log(latlng);
-
-    for(let i = 0; i < length; i++){
+    for(let i = 0; i < length; i++){ //loop through the XML
         const stationLat = xml.getElementsByTagName("LAT")[i].childNodes[0].nodeValue;
-        //console.log(stationLat);
         const stationLong = xml.getElementsByTagName("LONG")[i].childNodes[0].nodeValue;
-
-        if(lat === stationLat && long  === stationLong){
+        if(lat == stationLat && long  == stationLong){
             const name = xml.getElementsByTagName("NAME")[i].childNodes[0].nodeValue;
             const stn = xml.getElementsByTagName("STN")[i].childNodes[0].nodeValue;
-            console.log({stn, name});
-            //alert(name)
+            modal.style.display = 'block';
+            modelHeader.innerHTML = "Weather in "+ name;
             i = length;
-            bindButtonToModal("dataModal", "close")
-            openModal("dataModal");
+            const data = generateData();
+            //drawGraph('chart',data, 400, 400 );
+            addData(stn)
 
         }
     }
+}
 
-}*/
+function addData(stn){
+    fetch("getStationData.php?station="+stn)
+        .then(response => response.text())
+        .then(data => {
+            let parser = new DOMParser();
+            xml = parser.parseFromString(data, "text/xml")
+            const length = xml.getElementsByTagName("MEASUREMENT").length;
+            for(let i = 0; i < length; i++){
+                const stn = xml.getElementsByTagName("STN")[i].childNodes[0].nodeValue;
+                console.log(stn)
+            }
+        })
 
-const modal = document.getElementById("dataModal");
-const button = document.getElementById("close");
-
-button.onclick = function(){modal.style.display = "none"}
-
-modal.style.display = "block";
+}

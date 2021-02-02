@@ -45,12 +45,14 @@ function getAllData():array{
         return $results;
 
     }
+    return null;
 }
 
 function getAllStations():array {
     global $limit;
     global $link;
-    $sql = "SELECT * FROM stations";//" LIMIT ".$limit;
+    //$sql = "SELECT * FROM stations where latitude > 60";//" LIMIT ".$limit;
+    $sql = "SELECT * FROM stations where latitude > 60  ";
     if($stmt = mysqli_prepare($link, $sql)){
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
@@ -61,6 +63,23 @@ function getAllStations():array {
         mysqli_free_result($result);
         return $results;
     }
+    return null;
+}
+
+function getStationsWithSnow():array {
+    $sql = "select distinct st.stn, st.name, mes.sndp from measurements as mes inner join stations as st on mes.stn = st.stn where mes.snowing = 1 and mes.sndp > 0 and st.stn in ( select stn from stations where country = 'NORWAY' or country = 'CANADA' or (country = 'UNITED STATES' and latitude > 54) or stn in (726166, 726115, 725165, 726145, 726170, 726114) ) group by st.stn order by mes.sndp desc limit 15";
+    global $link;
+    if ($stmt = mysqli_prepare($link, $sql)){
+        mysqli_stmt_execute($stmt);
+        $result =  mysqli_stmt_get_result($stmt);
+        $results = [];
+        while($data = mysqli_fetch_assoc($result)){
+            array_push($results, $data);
+        }
+        mysqli_free_result($result);
+        return $results;
+    }
+    return null;
 }
 
 

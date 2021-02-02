@@ -10,6 +10,12 @@
         <p>Hi {$_SESSION["username"]}</p>
     </div>
     <div>
+        <p><a href="map.php">Map</a></p>
+    </div>
+    <div>
+        <p><a href="snow.php">Snow Precipitation</a></p>
+    </div>
+    <div>
         <p><a href="logout.php">Logout</a></p>
     </div>
 </div>
