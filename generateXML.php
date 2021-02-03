@@ -45,12 +45,14 @@ function getAllData():array{
         return $results;
 
     }
+    return null;
 }
 
 function getAllStations():array {
     global $limit;
     global $link;
-    $sql = "SELECT * FROM stations";//" LIMIT ".$limit;
+    //$sql = "SELECT * FROM stations where latitude > 60";//" LIMIT ".$limit;
+    $sql = "SELECT * FROM stations where latitude > 60  ";
     if($stmt = mysqli_prepare($link, $sql)){
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
@@ -61,6 +63,24 @@ function getAllStations():array {
         mysqli_free_result($result);
         return $results;
     }
+    return null;
+}
+
+function getStationsWithSnow():array {
+    //select the station id, name, country and snow if there has been snow, and sort it based on the amount
+    $sql = "select distinct st.stn, st.name, st.country, mes.sndp from measurements as mes inner join stations as st on mes.stn = st.stn where mes.snowing = 1 and mes.sndp > 0 and st.stn in ( select stn from stations where country = 'NORWAY' or country = 'CANADA' or (country = 'UNITED STATES' and latitude > 54) or stn in (726166, 726115, 725165, 726145, 726170, 726114) ) group by st.stn order by mes.sndp desc limit 15";
+    global $link;
+    if ($stmt = mysqli_prepare($link, $sql)){
+        mysqli_stmt_execute($stmt);
+        $result =  mysqli_stmt_get_result($stmt);
+        $results = [];
+        while($data = mysqli_fetch_assoc($result)){
+            array_push($results, $data);
+        }
+        mysqli_free_result($result);
+        return $results;
+    }
+    return null;
 }
 
 
@@ -72,11 +92,15 @@ function generateEntryStationDataTable(array $row):string {
     $FRSHTT .= $row['hail'] ? '1' : '0';
     $FRSHTT .= $row['thunder'] ? '1' : '0';
     $FRSHTT .= $row['tornado'] ? '1' : '0';
+    $dateTime =strtotime($row['date']);
+    $date = date('m/d/Y', $dateTime);
+    $time = date('H:m:s');
+
     return <<<EOT
 	<MEASUREMENT>
 		<STN>{$row['stn']}</STN>
-		<DATE>{$row['date']}</DATE>
-		<TIME>15:59:46</TIME>
+		<DATE>{$date}</DATE>
+		<TIME>{$time}</TIME>
 		<TEMP>{$row['temp']}</TEMP>
 		<DEWP>{$row['dewp']}</DEWP>
 		<STP>{$row['stp']}</STP>
