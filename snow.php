@@ -14,6 +14,7 @@ redirectIfNotLoggedIn();
             <tr>
                 <th>STN</th>
                 <th>Name</th>
+                <th>Country</th>
                 <th>Fallen snow</th>
             </tr>
         </thead>
