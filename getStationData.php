@@ -1,5 +1,6 @@
 <?php
 require_once('generateXML.php');
+require_once('includes/functions.php');
 
 $file = false;
 $station = null;

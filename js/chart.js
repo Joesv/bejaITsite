@@ -13,7 +13,7 @@ function generateData() {
 }
 
 
-
+/** get the XY coordinates, while keeping distance from the  */
 function convertDataToXY(minVal, maxVal, val, entry, canvas, data, offset) {
     const length = data.length;
     const x = Math.round((canvas.width - offset.left - offset.right) / length * entry + offset.left);
