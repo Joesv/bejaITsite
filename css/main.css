@@ -67,3 +67,8 @@ tr:nth-child(even) {
     text-decoration: none;
 }
 
+.menu-link {
+    display: inline-block;
+    height:100%;
+    width: 100%;
+}

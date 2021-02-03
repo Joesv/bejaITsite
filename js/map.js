@@ -63,6 +63,7 @@ function updateMarkers(){
 /** onclick event */
 function onMarkerClick(event){
     //event gegevens
+    console.log("hello")
     const latlng = event.latlng;
     const lat = latlng.lat;
     const long = latlng.lng;
@@ -72,30 +73,143 @@ function onMarkerClick(event){
         const stationLat = xml.getElementsByTagName("LAT")[i].childNodes[0].nodeValue;
         const stationLong = xml.getElementsByTagName("LONG")[i].childNodes[0].nodeValue;
         if(lat == stationLat && long  == stationLong){
-            const name = xml.getElementsByTagName("NAME")[i].childNodes[0].nodeValue;
-            const stn = xml.getElementsByTagName("STN")[i].childNodes[0].nodeValue;
+            console.log("hello world!")
+            let name = xml.getElementsByTagName("NAME")[i].childNodes[0].nodeValue;
+            let stn = xml.getElementsByTagName("STN")[i].childNodes[0].nodeValue;
             modal.style.display = 'block';
-            modelHeader.innerHTML = "Weather in "+ name;
+            modelHeader.innerHTML = "Weather";
             i = length;
             const data = generateData();
             //drawGraph('chart',data, 400, 400 );
-            addData(stn)
+            getData(stn)
 
         }
     }
 }
 
-function addData(stn){
+function getData(stn){
     fetch("getStationData.php?station="+stn)
         .then(response => response.text())
         .then(data => {
             let parser = new DOMParser();
-            xml = parser.parseFromString(data, "text/xml")
-            const length = xml.getElementsByTagName("MEASUREMENT").length;
-            for(let i = 0; i < length; i++){
-                const stn = xml.getElementsByTagName("STN")[i].childNodes[0].nodeValue;
-                console.log(stn)
+            let stationData = parser.parseFromString(data, "text/xml")
+            const downloadLink = document.getElementById("downloadLink");
+            const length = stationData.getElementsByTagName("MEASUREMENT").length;
+            if(length === 0){ // if there are no records found show it on the page
+                document.getElementsByClassName("modal-body")[0].style.display = "none";
+                document.getElementsByClassName("error")[0].style.display = "block";
+                document.getElementById("downloadLink").style.display = "none";
+            } else {
+                document.getElementsByClassName("modal-body")[0].style.display = "block";
+                document.getElementsByClassName("error")[0].style.display = "none";
+                downloadLink.style.display = "inline";
+                downloadLink.href="getStationData.php?station="+stn +"&file=true";
+                let dewp = [];
+                let visib = [];
+                let wdsp = [];
+                let stp = [];
+                let prcp = [];
+                let temp = [];
+                let time = [];
+                let date = [];
+                let winddir;
+                let frshtt;
+                for (let i = 0; i < length; i++) {
+                    dewp.push(stationData.getElementsByTagName("DEWP")[i].childNodes[0].nodeValue);
+                    visib.push(stationData.getElementsByTagName("VISIB")[i].childNodes[0].nodeValue);
+                    wdsp.push(stationData.getElementsByTagName("WDSP")[i].childNodes[0].nodeValue);
+                    prcp.push(stationData.getElementsByTagName("PRCP")[i].childNodes[0].nodeValue);
+                    winddir = stationData.getElementsByTagName("WNDDIR")[i].childNodes[0].nodeValue;
+                    temp.push(stationData.getElementsByTagName("TEMP")[i].childNodes[0].nodeValue);
+                    time.push(stationData.getElementsByTagName("TIME")[i].childNodes[0].nodeValue);
+                    date.push(stationData.getElementsByTagName("DATE")[i].childNodes[0].nodeValue);
+                    stp.push(stationData.getElementsByTagName("STP")[i].childNodes[0].nodeValue);
+                    frshtt = stationData.getElementsByTagName("FRSHTT")[i].childNodes[0].nodeValue;
+
+
+                }
+                modal.innerHTML  += "<a href='getStationData.php?station="+ stn+ "&file=true' target='_blank'>Download</a>";
+
+
+                drawDirectionArrow("wind", 200, 200, parseInt(winddir));
+
+                let tbody = document.getElementById("tbody");
+                let tempData = document.getElementById("tempData");
+                let otherData = document.getElementById("otherdata");
+
+                otherData.innerHTML = "";
+                tempData.innerHTML = "";
+                tbody.innerHTML = "";
+
+                let startAt = 0;
+                if(length > 10) {
+                    startAt = length - 10;
+                }
+
+                for(let i = startAt; i < length; i++){
+                    let html = "<tr>";
+                    html += "<td>" + dewp[i] + "</td>";
+                    html += "<td>" + stp[i] + "</td>";
+                    html += "<td>" + visib[i] + "</td>";
+                    html += "<td>" + wdsp[i] + "</td>";
+                    html += "<td>" + prcp[i] + "</td>";
+                    html += "</tr>";
+                    tbody.innerHTML+=html;
+
+                    html = "<tr>";
+                    html += "<td>" + date[i] + "</td>";
+                    html += "<td>" + time[i] + "</td>";
+                    html += "<td>" + temp[i] + "</td>";
+                    html += "</tr>";
+                    tempData.innerHTML += html;
+                }
+
+                let html = "<p>";
+                let string = frshtt.split("");
+                if(string[0] === "1"){
+                    html+="It has been freezing";
+                } else {
+                    html+="It has not been freezing";
+                }
+                html+="<br>";
+                if(string[1] === "1"){
+                    html+="It has been raining";
+                } else {
+                    html+="It has not been raining";
+                }
+                html+="<br>";
+                if(string[2] === "1"){
+                    html+="It has been snowing";
+                } else {
+                    html+="It has not been snowing";
+                }
+                html+="<br>";
+                if(string[3] === "1"){
+                    html+="There has been hail";
+                } else {
+                    html+= "There has been no hail";
+                }
+                html+="<br>";
+                if(string[4] === "1"){
+                    html+="There has been thunder";
+                } else {
+                    html+="There has been no thunder";
+                }
+                html+="<br>";
+                if(string[5] === "1"){
+                    html+="There has been a tornado";
+                } else {
+                    html+="There has been no tornado";
+                }
+                html+="<br></p>";
+                otherData.innerHTML = html;
+
+
+
+
+
             }
+
         })
 
 }

@@ -7,6 +7,9 @@ function  drawDirectionArrow(canvasID, width, height, rotation) {
     const ctx = canvas.getContext("2d");
     canvas.height = height;
     canvas.width = width;
+    ctx.clearRect(0,0, width, height);
+    ctx.font = "20px serif";
+    ctx.strokeText("winddir", 0,20)
     ctx.save();
     //get the center point of the canvas from which the arrow is suposed to be drawn
     let x = width/2;

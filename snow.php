@@ -25,6 +25,7 @@ redirectIfNotLoggedIn();
 <tr>
     <td>{$row['stn']}</td>
     <td>{$row['name']}</td>
+    <td>{$row['country']}</td>
     <td>{$row['sndp']}</td>
 </tr>
 EOD;
